@@ -1,5 +1,5 @@
 # voc-demo
-## mkdir build
-## cd build
-## cmake ../
-## build
+    mkdir build
+    cd build
+    cmake ../
+    build
