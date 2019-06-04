@@ -58,14 +58,15 @@ void detectFeatures(vector<vector<Mat > > &features, vector<Mat> images, int Num
     }
 }
 
-void detectFeature(vector<Mat > &features, Mat image)
+Mat detectFeature(Mat image)
 {
     //cout<<"detecting ORB features ... "<<endl;
     Ptr< Feature2D > detector = ORB::create();
     Mat descriptor;
     vector<KeyPoint> keypoints;
     detector->detectAndCompute( image, Mat(), keypoints, descriptor );
-    features.push_back(descriptor);
+    return descriptor;
+    //features.push_back(descriptor);
 }
 
 double str2double(string str)

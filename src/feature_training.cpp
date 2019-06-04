@@ -24,19 +24,26 @@ int main( int argc, char** argv )
     }
     in.close();
     //load features
-    vector<vector<Mat > > features;
+    vector<vector<Mat >> features;
     for (int i = 0 ; i < image_path.size(); i++){
         Mat t_image;
+        Mat descriptor;
         vector<Mat > feature;
-        t_image = imread(image_path[i]);
-        detectFeature(feature, t_image);
+        t_image.push_back(imread(image_path[i]));
+        descriptor = detectFeature(t_image);
+        changeStructureORB(descriptor, feature);
         features.push_back(feature);
     }
-    cout<<features.size()<<endl;
+    cout<<"feature size is "<<features.size()<<endl;
     //voc param
     //---------
     ORBVocabulary vocab;
-    vocab.loadFromTextFile("ORBvoc.txt");
+    /*
+    ifstream ifile("ORBvoc.txt");
+    if(ifile){
+        vocab.loadFromTextFile("voc.txt");
+    }
+    else cout<<"no file"<<endl;*/
     if ( vocab.empty() ){
         cerr<<"Vocabulary does not exist. use train image to creat vocabulary "<<endl;
         //generate vocabulary
@@ -46,7 +53,7 @@ int main( int argc, char** argv )
         const DBoW2::ScoringType score = DBoW2::L1_NORM;
         ORBVocabulary m_vocab(k, L, weight, score);
         m_vocab.create( features );
-        m_vocab.saveToTextFile("voc.txt" );
+        m_vocab.saveToTextFile("tvoc.txt" );
         vocab = m_vocab;
     }
     
