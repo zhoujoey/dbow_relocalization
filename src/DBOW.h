@@ -42,7 +42,7 @@ void changeStructureORB( const cv::Mat &descriptor, vector<cv::Mat> &out) {
 
 void detectFeatures(vector<vector<Mat > > &features, vector<Mat> images, int Num_images)
 {
-    cout<<"detecting ORB features ... "<<endl;
+    //cout<<"detecting ORB features ... "<<endl;
     Ptr< Feature2D > detector = ORB::create();
     vector<Mat> descriptors;
     
@@ -58,15 +58,25 @@ void detectFeatures(vector<vector<Mat > > &features, vector<Mat> images, int Num
     }
 }
 
+void detectFeature(vector<Mat > &features, Mat image)
+{
+    //cout<<"detecting ORB features ... "<<endl;
+    Ptr< Feature2D > detector = ORB::create();
+    Mat descriptor;
+    vector<KeyPoint> keypoints;
+    detector->detectAndCompute( image, Mat(), keypoints, descriptor );
+    features.push_back(descriptor);
+}
+
 double str2double(string str)
 {
     double d_str = atof(str.c_str());
     return d_str;
 }
 
-void read_data(const string file_name, vector<ImageGroundTruth> & gt_images)
+void read_data(string fold, string file_name, vector<ImageGroundTruth> & gt_images)
 {
-    ifstream file(file_name);
+    ifstream file(fold + file_name);
     string line;
     while (getline(file, line)){
         stringstream ss(line);

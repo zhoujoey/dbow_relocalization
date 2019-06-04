@@ -22,11 +22,6 @@ ${PROJECT_SOURCE_DIR}/DBoW2/lib/libDBoW2.so
 )
 
 
-add_executable( loop_closure src/loop_closure.cpp src/DBOW.h)
-target_link_libraries( loop_closure ${OpenCV_LIBS}
-${PROJECT_SOURCE_DIR}/DBoW2/lib/libDBoW2.so
-)
-
 add_executable( search_id src/search_id.cpp src/DBOW.h)
 target_link_libraries( search_id ${OpenCV_LIBS}
 ${PROJECT_SOURCE_DIR}/DBoW2/lib/libDBoW2.so

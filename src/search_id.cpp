@@ -21,6 +21,8 @@ void diff_gt(const ImageGroundTruth im1, const ImageGroundTruth im2, double &pos
 
 int main( int argc, char** argv )
 {
+    string datafold = "/home/willis/VSLAM/Freiburg2Pioneer/";
+    string trainset = "dataset_train.txt";
     time_t start_time, end_time;
     double ev_time;
     DBoW2::QueryResults ret;
@@ -34,30 +36,29 @@ int main( int argc, char** argv )
     ev_time = difftime(end_time, start_time);
     cout<< "loading database costs " << ev_time << "s" <<endl;
     //load test images
-    cout<<"reading images... "<<endl;
-    vector<Mat> images;
+    cout<<"reading test images... "<<endl;
     vector<ImageGroundTruth> gt_lists;
-    read_data("dataset_test.txt", gt_lists);
+    read_data(datafold, "dataset_test.txt", gt_lists);
+    vector<vector<Mat > > features;
     for ( int i=0; i<gt_lists.size(); i++ ){
         string path = gt_lists[i].name;
-        images.push_back( imread(path) );
+        Mat t_image;
+        vector<Mat > feature;
+        t_image = imread(path);
+        detectFeature(feature, t_image);
+        features.push_back(feature);
     }
     //load train images
+    cout<<"reading train images... "<<endl;
     vector<ImageGroundTruth> gt_train;
-    read_data("dataset_train.txt", gt_train); 
-
-    //get orb features
-    vector<vector<Mat > > features;
-    start_time = time(0);
-    detectFeatures(features, images, gt_lists.size());
-    end_time = time(0);
-    ev_time = difftime(end_time, start_time);
-    cout<< "get orb feature average costtime is " << ev_time/images.size() << "s" <<endl;
+    read_data(datafold, "dataset_train.txt", gt_train);
+    
     start_time = time(0);
     double sum_pos, sum_ang;
     for(int i = 0; i < gt_lists.size(); i++){
         db.query(features[i], ret, 4);
         double pos , ang ;
+        cout<<ret<<endl;
         diff_gt(gt_lists[i], gt_train[ret[0].Id], pos, ang);
         sum_pos += pos;
         sum_ang += ang;    
@@ -66,4 +67,5 @@ int main( int argc, char** argv )
     end_time = time(0);
     ev_time = difftime(end_time, start_time);
     cout<< "average image search time is " << ev_time / gt_lists.size() << "s" <<endl;
+    
 }
