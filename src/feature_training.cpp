@@ -12,6 +12,9 @@ int main( int argc, char** argv )
     string datafold = "/home/willis/VSLAM/Freiburg2Pioneer/";
     string trainset = "dataset_train.txt";
     //import image data from dataset.txt
+    vector<ImageGroundTruth> gt_lists;
+    read_data(datafold, "dataset_test.txt", gt_lists);
+    /*
     ifstream in(datafold + trainset);
     if(!in){
         cerr<<"cannot open train file"<<endl;
@@ -19,17 +22,26 @@ int main( int argc, char** argv )
     }
     string str;
     vector<string> image_path;
-    while(getline(in, str, ' ')){
-        if(str.size()>0) image_path.push_back(datafold + str);
+    while(getline(in, str)){
+        if(str.size()>0) {
+            str = 
+            image_path.push_back(datafold + str);
+            continue;
+        }
     }
     in.close();
+    */
     //load features
     vector<vector<Mat >> features;
-    for (int i = 0 ; i < image_path.size(); i++){
+    //features.clear();
+    //features.reserve(image_path.size());
+    for (int i = 0 ; i < gt_lists.size(); i++){
         Mat t_image;
         Mat descriptor;
         vector<Mat > feature;
-        t_image.push_back(imread(image_path[i]));
+        string path = datafold + gt_lists[i].name;
+        cout<<path<<endl;
+        t_image = imread(path);
         descriptor = detectFeature(t_image);
         changeStructureORB(descriptor, feature);
         features.push_back(feature);
@@ -58,7 +70,7 @@ int main( int argc, char** argv )
     }
     
     ORBDatabase db(vocab, false, 0);
-    for (int i = 0 ; i<image_path.size(); i++){
+    for (int i = 0 ; i<gt_lists.size(); i++){
         db.add(features[i]);
     }
     db.save("database.db");

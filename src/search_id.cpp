@@ -42,11 +42,12 @@ int main( int argc, char** argv )
     read_data(datafold, "dataset_test.txt", gt_lists);
     //detect features
     vector<vector<Mat >> features;
+    
     for (int i = 0 ; i < gt_lists.size(); i++){
         Mat t_image;
         Mat descriptor;
         vector<Mat > feature;
-        t_image.push_back(imread(gt_lists[i].name));
+        t_image.push_back(imread(datafold + gt_lists[i].name));
         descriptor = detectFeature(t_image);
         changeStructureORB(descriptor, feature);
         features.push_back(feature);
