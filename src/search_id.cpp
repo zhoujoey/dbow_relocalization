@@ -24,6 +24,7 @@ int main( int argc, char** argv )
     //-----------------------
     string datafold = "/home/willis/VSLAM/Freiburg2Pioneer/";
     string trainset = "dataset_train.txt";
+    string testset = "dataset_test.txt";
     time_t start_time, end_time;
     double ev_time;
     DBoW2::QueryResults ret;
@@ -39,7 +40,7 @@ int main( int argc, char** argv )
     //load test images
     cout<<"reading test images... "<<endl;
     vector<ImageGroundTruth> gt_lists;
-    read_data(datafold, "dataset_test.txt", gt_lists);
+    read_data(datafold, testset, gt_lists);
     //detect features
     vector<vector<Mat >> features;
     
@@ -56,19 +57,17 @@ int main( int argc, char** argv )
     //load train images
     cout<<"reading train images... "<<endl;
     vector<ImageGroundTruth> gt_train;
-    read_data(datafold, "dataset_train.txt", gt_train);
+    read_data(datafold, trainset, gt_train);
     
     start_time = time(0);
     double sum_pos, sum_ang;
     for(int i = 0; i < gt_lists.size(); i++){
         db.query(features[i], ret, 4);
         double pos , ang ;
-        cout<<ret<<endl;
         if (ret.size()!=0){
-        diff_gt(gt_lists[i], gt_train[ret[0].Id], pos, ang);
-        sum_pos += pos;
-        sum_ang += ang;  
-        cout<<"no ret"<<endl;
+            diff_gt(gt_lists[i], gt_train[ret[0].Id], pos, ang);
+            sum_pos += pos;
+            sum_ang += ang;
         }  
     }
     cout << "diff pose is " <<sum_pos/gt_lists.size() <<"| angle is " << sum_ang/gt_lists.size() << endl;
