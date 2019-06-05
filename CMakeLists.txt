@@ -16,13 +16,13 @@ include_directories( ${OpenCV_INCLUDE_DIRS} ${PROJECT_SOURCE_DIR})
 
 include_directories(src/)
 
-add_executable( feature_training src/feature_training.cpp src/DBOW.h)
+add_executable( feature_training src/feature_training.cc src/DBOW.h)
 target_link_libraries( feature_training ${OpenCV_LIBS} 
 ${PROJECT_SOURCE_DIR}/DBoW2/lib/libDBoW2.so
 )
 
 
-add_executable( search_id src/search_id.cpp src/DBOW.h)
+add_executable( search_id src/search_id.cc src/DBOW.h)
 target_link_libraries( search_id ${OpenCV_LIBS}
 ${PROJECT_SOURCE_DIR}/DBoW2/lib/libDBoW2.so
 )
