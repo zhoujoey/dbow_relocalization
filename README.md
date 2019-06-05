@@ -3,6 +3,11 @@
     cd build
     cmake ../
     build
+## install dbow2
+    cd dbow2
+    mkdir build && build
+    cmake ../
+    make
 ## opencv not found 
 ### install opencv
 * down load opencv from source 
