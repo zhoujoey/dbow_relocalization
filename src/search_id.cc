@@ -60,7 +60,13 @@ int main( int argc, char** argv )
     ReadData(datafold, trainset, gt_train);
     
     start_time = time(0);
+    //vector<double> poses;
+    //vector<double> angles;
     double sum_pos, sum_ang;
+    double max_pos = 0;
+    double max_ang = 0;
+    double min_pos = 1000000;
+    double min_ang = 1000000;
     for(int i = 0; i < gt_lists.size(); i++){
         db.query(features[i], ret, 4);
         double pos , ang ;
@@ -68,11 +74,17 @@ int main( int argc, char** argv )
             DiffGroundTruth(gt_lists[i], gt_train[ret[0].Id], pos, ang);
             sum_pos += pos;
             sum_ang += ang;
+            if (max_pos < pos) max_pos = pos;
+            if (max_ang < ang) max_ang = ang;
+            if (min_pos > pos) min_pos = pos;
+            if (min_ang > ang) min_ang = ang;
         }  
     }
+    cout<<"max pos is "<<max_pos<<"  min_pos is "<<min_pos<<endl;
+    cout<<"max ang is "<<max_ang<<"  min_ang is "<<min_ang<<endl;
     cout << "diff pose is " <<sum_pos/gt_lists.size() <<"| angle is " << sum_ang/gt_lists.size() << endl;
     end_time = time(0);
     ev_time = difftime(end_time, start_time);
-    cout<< "average image search time is " << ev_time / gt_lists.size() << "s" <<endl;
+    cout<< "average image search time is " << ev_time / (gt_lists.size()*1.0) << "s" <<endl;
     
 }
