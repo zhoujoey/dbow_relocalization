@@ -10,11 +10,13 @@ include_directories( ${OpenCV_INCLUDE_DIRS} )
 
 # dbow3 
 # dbow3 is a simple lib so I assume you installed it in default directory 
-set( DBoW3_INCLUDE_DIRS "/usr/local/include" )
-set( DBoW3_LIBS "/usr/local/lib/libDBoW3.a" )
+#set( DBoW3_INCLUDE_DIRS "/usr/local/include" )
+set( DBoW3_LIBS ${PROJECT_SOURCE_DIR}/DBoW3/lib/libDBoW3.so )
 
 add_executable( feature_training src/feature_training.cpp )
-target_link_libraries( feature_training ${OpenCV_LIBS} ${DBoW3_LIBS} )
+target_link_libraries( feature_training ${OpenCV_LIBS}
+${PROJECT_SOURCE_DIR}/DBoW3/lib/libDBoW3.so)
+# ${DBoW3_LIBS} )
 
 add_executable( gen_database src/gen_database.cpp )
 target_link_libraries( gen_database ${OpenCV_LIBS} ${DBoW3_LIBS} )
