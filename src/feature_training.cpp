@@ -15,7 +15,7 @@ int main( int argc, char** argv )
     double ev_time;
     //import image data from dataset.txt
     vector<ImageGroundTruth> gt_lists;
-    read_data(datafold, trainset, gt_lists);
+    ReadData(datafold, trainset, gt_lists);
     //load features
     start_time = time(0);
     vector<vector<Mat >> features;
@@ -24,8 +24,8 @@ int main( int argc, char** argv )
         Mat descriptor;
         vector<Mat > feature;
         t_image = imread(datafold + gt_lists[i].name);
-        descriptor = detectFeature(t_image);
-        changeStructureORB(descriptor, feature);
+        descriptor = DetectFeature(t_image);
+        ChangeStructureORB(descriptor, feature);
         features.push_back(feature);
     }
     end_time = time(0);

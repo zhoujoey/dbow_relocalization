@@ -7,7 +7,7 @@ using namespace std;
  * show how to load database to check images
  * ************************************************/
 
-void diff_gt(const ImageGroundTruth im1, const ImageGroundTruth im2, double &pos, double &ang)
+void DiffGroundTruth(const ImageGroundTruth im1, const ImageGroundTruth im2, double &pos, double &ang)
 {
     pos = sqrt(pow((im1.x - im2.x), 2) +\
                      pow((im1.y - im2.y), 2) + \
@@ -40,7 +40,7 @@ int main( int argc, char** argv )
     //load test images
     cout<<"reading test images... "<<endl;
     vector<ImageGroundTruth> gt_lists;
-    read_data(datafold, testset, gt_lists);
+    ReadData(datafold, testset, gt_lists);
     //detect features
     vector<vector<Mat >> features;
     
@@ -49,15 +49,15 @@ int main( int argc, char** argv )
         Mat descriptor;
         vector<Mat > feature;
         t_image.push_back(imread(datafold + gt_lists[i].name));
-        descriptor = detectFeature(t_image);
-        changeStructureORB(descriptor, feature);
+        descriptor = DetectFeature(t_image);
+        ChangeStructureORB(descriptor, feature);
         features.push_back(feature);
     }
     cout<<"feature size is "<<features.size()<<endl;
     //load train images
     cout<<"reading train images... "<<endl;
     vector<ImageGroundTruth> gt_train;
-    read_data(datafold, trainset, gt_train);
+    ReadData(datafold, trainset, gt_train);
     
     start_time = time(0);
     double sum_pos, sum_ang;
@@ -65,7 +65,7 @@ int main( int argc, char** argv )
         db.query(features[i], ret, 4);
         double pos , ang ;
         if (ret.size()!=0){
-            diff_gt(gt_lists[i], gt_train[ret[0].Id], pos, ang);
+            DiffGroundTruth(gt_lists[i], gt_train[ret[0].Id], pos, ang);
             sum_pos += pos;
             sum_ang += ang;
         }  

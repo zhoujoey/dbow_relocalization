@@ -21,7 +21,7 @@ ORBVocabulary;
 typedef DBoW2::TemplatedDatabase<DBoW2::FORB::TDescriptor, DBoW2::FORB> 
 ORBDatabase;
 
-class ImageGroundTruth
+struct ImageGroundTruth
 {
   public:
     string name;
@@ -34,13 +34,13 @@ class ImageGroundTruth
     double qw;
 };
 
-void changeStructureORB( const cv::Mat &descriptor, vector<cv::Mat> &out) {
+void ChangeStructureORB( const cv::Mat &descriptor, vector<cv::Mat> &out) {
     for (int i = 0; i < descriptor.rows; i++) {
         out.push_back(descriptor.row(i));
     }
 }
 
-void detectFeatures(vector<vector<Mat > > &features, vector<Mat> images, int Num_images)
+void DetectFeatures(vector<vector<Mat > > &features, vector<Mat> images, int Num_images)
 {
     //cout<<"detecting ORB features ... "<<endl;
     Ptr< Feature2D > detector = ORB::create();
@@ -54,11 +54,11 @@ void detectFeatures(vector<vector<Mat > > &features, vector<Mat> images, int Num
         Mat descriptor;
         detector->detectAndCompute( image, Mat(), keypoints, descriptor );
         features.push_back(vector<cv::Mat>());
-        changeStructureORB(descriptor, features.back());
+        ChangeStructureORB(descriptor, features.back());
     }
 }
 
-Mat detectFeature(Mat image)
+Mat DetectFeature(Mat image)
 {
     //cout<<"detecting ORB features ... "<<endl;
     Ptr< Feature2D > detector = ORB::create();
@@ -69,13 +69,13 @@ Mat detectFeature(Mat image)
     //features.push_back(descriptor);
 }
 
-double str2double(string str)
+double Str2Double(string str)
 {
     double d_str = atof(str.c_str());
     return d_str;
 }
 
-void read_data(string fold, string file_name, vector<ImageGroundTruth> & gt_images)
+void ReadData(string fold, string file_name, vector<ImageGroundTruth> & gt_images)
 {
     ifstream file(fold + file_name);
     string line;
@@ -89,13 +89,13 @@ void read_data(string fold, string file_name, vector<ImageGroundTruth> & gt_imag
         if(str_list.size() == 8 ){
             ImageGroundTruth gt_image;
             gt_image.name = str_list[0];
-            gt_image.x = str2double(str_list[1]);
-            gt_image.y = str2double(str_list[2]);
-            gt_image.z = str2double(str_list[3]);
-            gt_image.qx = str2double(str_list[4]);
-            gt_image.qy = str2double(str_list[5]);
-            gt_image.qz = str2double(str_list[6]);
-            gt_image.qw = str2double(str_list[7]);
+            gt_image.x = Str2Double(str_list[1]);
+            gt_image.y = Str2Double(str_list[2]);
+            gt_image.z = Str2Double(str_list[3]);
+            gt_image.qx = Str2Double(str_list[4]);
+            gt_image.qy = Str2Double(str_list[5]);
+            gt_image.qz = Str2Double(str_list[6]);
+            gt_image.qw = Str2Double(str_list[7]);
             gt_images.push_back(gt_image);
         }   
     }
