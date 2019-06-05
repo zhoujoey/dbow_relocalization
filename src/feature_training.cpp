@@ -9,12 +9,15 @@ using namespace std;
 int main( int argc, char** argv )
 {
     bool is_self_train = true;
-    string datafold = "/home/willis/VSLAM/Freiburg2Pioneer/";
+    string datafold = "/home/willis/dataset/slam_data/KingsCollege/";
     string trainset = "dataset_train.txt";
+    time_t start_time, end_time;
+    double ev_time;
     //import image data from dataset.txt
     vector<ImageGroundTruth> gt_lists;
     read_data(datafold, trainset, gt_lists);
     //load features
+    start_time = time(0);
     vector<vector<Mat >> features;
     for (int i = 0 ; i < gt_lists.size(); i++){
         Mat t_image;
@@ -25,14 +28,16 @@ int main( int argc, char** argv )
         changeStructureORB(descriptor, feature);
         features.push_back(feature);
     }
-    cout<<"feature size is "<<features.size()<<endl;
+    end_time = time(0);
+    ev_time = difftime(end_time, start_time);
+    cout<< "extract " <<features.size() << "features. "<< "costs time:" << ev_time << "s" <<endl;
     //voc param
     //---------
     ORBVocabulary vocab;
     
-    ifstream ifile("voc.txt");
+    ifstream ifile("ORBvoc.txt");
     if(ifile){
-        vocab.loadFromTextFile("voc.txt");
+        vocab.loadFromTextFile("ORBvoc.txt");
     }
     else cout<<"no file"<<endl;
     if ( vocab.empty() ){
@@ -47,13 +52,16 @@ int main( int argc, char** argv )
         m_vocab.saveToTextFile("voc.txt" );
         vocab = m_vocab;
     }
-    
+    cout<<"begining save database"<<endl;
+    start_time = time(0);
     ORBDatabase db(vocab, false, 0);
     for (int i = 0 ; i<gt_lists.size(); i++){
         db.add(features[i]);
     }
     db.save("database.db");
     cout<<db<<endl;
-    cout<<"save data base"<<endl;
+    end_time = time(0);
+    ev_time = difftime(end_time, start_time);
+    cout<< "save database "<< "costs time:" << ev_time << "s" <<endl;
     return 0;
 }

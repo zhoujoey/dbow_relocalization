@@ -22,7 +22,7 @@ void diff_gt(const ImageGroundTruth im1, const ImageGroundTruth im2, double &pos
 int main( int argc, char** argv )
 {
     //-----------------------
-    string datafold = "/home/willis/VSLAM/Freiburg2Pioneer/";
+    string datafold = "/home/willis/dataset/slam_data/KingsCollege/";
     string trainset = "dataset_train.txt";
     string testset = "dataset_test.txt";
     time_t start_time, end_time;
